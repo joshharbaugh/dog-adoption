@@ -33,6 +33,7 @@ export function useAuth() {
       return true
     } catch (err) {
       setError('Failed to login. Please check your credentials and try again.')
+      console.error(`Login Error:`, err)
       return false
     } finally {
       setLoading(false)

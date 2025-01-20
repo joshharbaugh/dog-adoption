@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
-import { LogOut, Heart, Search } from 'lucide-react'
+import { LogOut, Heart } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -50,6 +51,7 @@ export default function SearchContent() {
         setBreeds(breedsData)
       } catch (error) {
         router.replace('/')
+        console.error(`Auth Check Error:`, error)
       }
     }
     
@@ -112,13 +114,6 @@ export default function SearchContent() {
     fetchDogs()
   }, [searchParams])
 
-  const handleBreedSelect = (value: string) => {
-    setSearchParams({
-      ...searchParams,
-      breeds: value === "all" ? [] : [value]
-    })
-  }
-
   const handleLogout = async () => {
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`, {
@@ -177,7 +172,7 @@ export default function SearchContent() {
                     <DialogTitle>Your Perfect Match!</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
-                    <img 
+                    <Image 
                       src={matchedDog.img} 
                       alt={matchedDog.name}
                       className="w-full h-64 object-cover rounded-lg"
@@ -286,7 +281,7 @@ export default function SearchContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dogs.map((dog) => (
               <Card key={dog.id} className="overflow-hidden">
-                <img 
+                <Image 
                   src={dog.img} 
                   alt={dog.name}
                   className="w-full h-48 object-cover"
