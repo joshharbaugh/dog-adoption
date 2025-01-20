@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
-  Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -15,6 +14,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { Command } from 'cmdk'
 
 interface BreedFilterProps {
   breeds: string[]
@@ -40,6 +41,8 @@ export default function BreedFilter({ breeds, selectedBreeds, onBreedsChange }: 
         <PopoverTrigger asChild>
           <Button
             variant="outline"
+            role="combobox"
+            aria-expanded={open}
             className="w-full justify-start"
           >
             {selectedBreeds.length > 0
@@ -48,35 +51,38 @@ export default function BreedFilter({ breeds, selectedBreeds, onBreedsChange }: 
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[300px] p-0" align="start">
-          <Command>
+          <Command shouldFilter={false}>
             <CommandInput placeholder="Search breeds..." />
             <CommandList>
               <CommandEmpty>No breeds found.</CommandEmpty>
-              <CommandGroup>
+              <CommandGroup heading="Breeds">
                 {breeds.map((breed) => {
                   const isSelected = selectedBreeds.includes(breed)
                   return (
                     <CommandItem
                       key={breed}
+                      value={breed}
                       onSelect={() => handleSelect(breed)}
-                      className="flex items-center gap-2"
                     >
-                      <div className={`w-4 h-4 border rounded-sm ${
-                        isSelected ? 'bg-primary border-primary' : 'border-input'
-                      }`}>
-                        {isSelected && (
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="w-4 h-4 text-primary-foreground"
-                          >
-                            <polyline points="20 6 9 17 4 12" />
-                          </svg>
+                      <div
+                        className={cn(
+                          "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                          isSelected
+                            ? "bg-primary text-primary-foreground"
+                            : "opacity-50 [&_svg]:invisible"
                         )}
+                      >
+                        <svg
+                          className={cn("h-4 w-4")}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
                       </div>
                       <span>{breed}</span>
                     </CommandItem>

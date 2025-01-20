@@ -172,7 +172,9 @@ export default function SearchContent() {
                     <DialogTitle>Your Perfect Match!</DialogTitle>
                   </DialogHeader>
                   <div className="space-y-4">
-                    <Image 
+                    <Image
+                      width={100}
+                      height={64}
                       src={matchedDog.img} 
                       alt={matchedDog.name}
                       className="w-full h-64 object-cover rounded-lg"
@@ -281,7 +283,9 @@ export default function SearchContent() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dogs.map((dog) => (
               <Card key={dog.id} className="overflow-hidden">
-                <Image 
+                <Image
+                  width={100}
+                  height={48}
                   src={dog.img} 
                   alt={dog.name}
                   className="w-full h-48 object-cover"
