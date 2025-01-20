@@ -21,6 +21,23 @@ export interface Location {
 }
 
 export interface Coordinates {
-  lat: number;
-  lon: number;
+  lat: number
+  lon: number
+}
+
+export interface LocationSearchParams {
+  city?: string
+  states?: string[]
+  size?: number
+  from?: number
+  geoBoundingBox?: {
+    top?: Coordinates
+    left?: Coordinates
+    bottom?: Coordinates
+    right?: Coordinates
+    bottom_left?: Coordinates
+    top_right?: Coordinates
+    bottom_right?: Coordinates
+    top_left?: Coordinates
+  }
 }

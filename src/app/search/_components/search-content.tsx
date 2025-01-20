@@ -15,6 +15,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Dog, Match } from '@/lib/types'
+import BreedFilter from './breed-filter'
+import LocationFilter from './location-filter'
 
 export default function SearchContent() {
   const router = useRouter()
@@ -24,6 +26,7 @@ export default function SearchContent() {
   const [loading, setLoading] = useState(true)
   const [searchParams, setSearchParams] = useState({
     breeds: [] as string[],
+    zipCodes: [] as string[],
     ageMin: '',
     ageMax: '',
     sort: 'breed:asc',
@@ -61,7 +64,9 @@ export default function SearchContent() {
         // Build query parameters
         const params = new URLSearchParams()
         if (searchParams.breeds.length > 0) {
-          params.append('breeds', searchParams.breeds.join(','))
+          searchParams.breeds.forEach((breed) => {
+            params.append('breeds', breed.toString())
+          })
         }
         if (searchParams.ageMin) {
           params.append('ageMin', searchParams.ageMin)
@@ -72,6 +77,12 @@ export default function SearchContent() {
         params.append('sort', searchParams.sort)
         params.append('size', searchParams.size.toString())
         params.append('from', searchParams.from.toString())
+
+        if (searchParams.zipCodes.length > 0) {
+          searchParams.zipCodes.forEach((zipCode) => {
+            params.append('zipCodes', zipCode.toString())
+          })
+        }
 
         // Get dog IDs
         const searchResponse = await fetch(
@@ -192,24 +203,28 @@ export default function SearchContent() {
         <Card>
           <CardContent className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <label className="text-sm font-medium">Breed</label>
-                <Select
-                  value={searchParams.breeds[0] || 'all'}
-                  onValueChange={handleBreedSelect}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select breed..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Breeds</SelectItem>
-                    {breeds.map((breed) => (
-                      <SelectItem key={breed} value={breed}>
-                        {breed}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              <div className="md:col-span-2">
+                <BreedFilter
+                  breeds={breeds}
+                  selectedBreeds={searchParams.breeds}
+                  onBreedsChange={(newBreeds) => 
+                    setSearchParams({
+                      ...searchParams,
+                      breeds: newBreeds
+                    })
+                  }
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <LocationFilter
+                  onLocationSelect={(zipCodes: string[]) => 
+                    setSearchParams({
+                      ...searchParams,
+                      zipCodes
+                    })
+                  }
+                />
               </div>
 
               <div>
