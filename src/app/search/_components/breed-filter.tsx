@@ -51,7 +51,7 @@ export default function BreedFilter({ breeds, selectedBreeds, onBreedsChange }: 
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[300px] p-0" align="start">
-          <Command shouldFilter={false}>
+          <Command shouldFilter={true}>
             <CommandInput placeholder="Search breeds..." />
             <CommandList>
               <CommandEmpty>No breeds found.</CommandEmpty>
